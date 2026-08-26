@@ -36,6 +36,20 @@ const EMPTY_SESSION: WalletSession = {
 export function useWalletSession() {
   const [session, setSession] = useState<WalletSession>(EMPTY_SESSION);
 
+  const pullBalance = useCallback(async (address: string) => {
+    setSession((prev) => ({ ...prev, balanceState: "loading" }));
+    const outcome = await readBalance(address);
+    setSession((prev) => {
+      if (!outcome.ok) {
+        return {
+          ...prev,
+          balanceState: outcome.reason === "UNFUNDED" ? "unfunded" : "unreachable",
+        };
+      }
+      return { ...prev, balanceXlm: outcome.xlm, balanceState: "ready" };
+    });
+  }, []);
+
   // Restore a previous grant asynchronously (no synchronous setState).
   useEffect(() => {
     let alive = true;
@@ -70,22 +84,7 @@ export function useWalletSession() {
     return () => {
       alive = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const pullBalance = useCallback(async (address: string) => {
-    setSession((prev) => ({ ...prev, balanceState: "loading" }));
-    const outcome = await readBalance(address);
-    setSession((prev) => {
-      if (!outcome.ok) {
-        return {
-          ...prev,
-          balanceState: outcome.reason === "UNFUNDED" ? "unfunded" : "unreachable",
-        };
-      }
-      return { ...prev, balanceXlm: outcome.xlm, balanceState: "ready" };
-    });
-  }, []);
+  }, [pullBalance]);
 
   const connect = useCallback(async () => {
     setSession((prev) => ({ ...prev, lastError: null }));
@@ -110,9 +109,11 @@ export function useWalletSession() {
 
   const recheckNetwork = useCallback(async () => {
     const network = await currentNetwork();
-    const isTestnet = network.ok && network.data === "TESTNET";
-    setSession((prev) => ({ ...prev, onTestnet: isTestnet }));
-    if (isTestnet && session.address) {
+    setSession((prev) => {
+      const isTestnet = network.ok && network.data === "TESTNET";
+      return { ...prev, onTestnet: isTestnet };
+    });
+    if (network.ok && network.data === "TESTNET" && session.address) {
       await pullBalance(session.address);
     }
   }, [session.address, pullBalance]);
