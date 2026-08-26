@@ -8,6 +8,10 @@ precisely what gets submitted.
 > ⚠️ **Testnet only.** TideSplit talks exclusively to the Stellar Testnet.
 > Funds come from the free friendbot faucet and carry no real-world value.
 
+## Live App
+
+[Launch TideSplit](https://tidesplit.netlify.app/)
+
 ## Features
 
 - Freighter connection with an explicit Testnet network guard
@@ -77,21 +81,31 @@ signed envelopes are submitted to Horizon.
 
 ## Screenshots
 
-<!-- Capture during manual verification, then replace these placeholders. -->
+### Freighter connection request
 
-![Connected wallet with balance](docs/screenshots/wallet-connected.png)
-_Pending capture._
+![Freighter connection request on Stellar Testnet](docs/screenshots/01-tidesplit-home.png)
 
-![Calculation summary](docs/screenshots/split-summary.png)
-_Pending capture._
+### Connected wallet and XLM balance
 
-![Confirmed settlement](docs/screenshots/settlement-confirmed.png)
-_Pending capture._
+![Connected Freighter wallet with Testnet XLM balance](docs/screenshots/02-wallet-connected.png)
+
+### Calculated share awaiting signature
+
+![Calculated TideSplit share awaiting confirmation in Freighter](docs/screenshots/03-transaction-pending.png)
+
+### Successful Testnet settlement
+
+![Successful TideSplit settlement with transaction hash](docs/screenshots/04-transaction-success.png)
+
+### Stellar Expert confirmation
+
+![Successful settlement verified on Stellar Expert Testnet](docs/screenshots/05-stellar-expert-confirmation.png)
 
 ## Verified Example Transaction
 
-- Transaction hash: `PENDING_MANUAL_VERIFICATION`
-- Explorer link: _added after the live Freighter flow_
+- Transaction hash: `e0c41741cec6a11ed5df66196dc878dfb70a4e38a9303bba88c6ffcfa7ae20f7`
+- Explorer link: [View on Stellar Expert](https://stellar.expert/explorer/testnet/tx/e0c41741cec6a11ed5df66196dc878dfb70a4e38a9303bba88c6ffcfa7ae20f7)
+- Payment: `46 XLM` on Stellar Testnet
 
 ## Troubleshooting
 

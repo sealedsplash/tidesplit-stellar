@@ -1,6 +1,7 @@
-# Screenshot placeholders
+# Submission Screenshots
 
-Capture during manual Testnet verification:
-1. wallet-connected.png
-2. split-summary.png
-3. settlement-confirmed.png
+1. `01-tidesplit-home.png` — Freighter connection request on Testnet
+2. `02-wallet-connected.png` — Connected wallet and XLM balance
+3. `03-transaction-pending.png` — Calculated share awaiting Freighter signature
+4. `04-transaction-success.png` — Successful settlement with transaction hash
+5. `05-stellar-expert-confirmation.png` — Successful Testnet transaction on Stellar Expert
