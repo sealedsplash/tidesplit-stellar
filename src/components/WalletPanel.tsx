@@ -1,11 +1,14 @@
-import { hasFreighter } from "../wallet/freighterAdapter";
 import type { WalletSession } from "../hooks/useWalletSession";
 
 const ERROR_COPY: Record<string, string> = {
   EXTENSION_MISSING:
     "Freighter is not installed in this browser. Get it at freighter.app, then reload TideSplit.",
+  WALLET_LOCKED:
+    "Freighter is locked. Unlock the extension, then press Check again.",
   ACCESS_DENIED:
     "Access was declined, so TideSplit cannot see your address. Press Connect when you are ready to allow it.",
+  NETWORK_MISMATCH:
+    "Freighter is not on the Stellar Testnet. Switch networks in the extension, then check again.",
   NETWORK_UNKNOWN:
     "TideSplit could not read which network Freighter is on. Open the extension and check its status.",
 };
@@ -19,21 +22,45 @@ interface Props {
 }
 
 /** Connection card: connect/disconnect controls, guard notice, balance. */
-export function WalletPanel({ session, connecting, onConnect, onDisconnect, onRecheck }: Props) {
-  if (!hasFreighter()) {
+export function WalletPanel({
+  session,
+  connecting,
+  onConnect,
+  onDisconnect,
+  onRecheck,
+}: Props) {
+  // Bounded detection window: never claim the wallet is missing here.
+  if (session.phase === "checking") {
     return (
       <section className="panel" aria-labelledby="wallet-title">
         <h2 className="panel-heading" id="wallet-title">
           Your wallet
         </h2>
-        <p className="banner banner-error">
+        <p className="banner banner-info" role="status">
+          Checking for the Freighter extension…
+        </p>
+      </section>
+    );
+  }
+
+  // Only after the detection deadline has elapsed do we show this.
+  if (session.phase === "missing") {
+    return (
+      <section className="panel" aria-labelledby="wallet-title">
+        <h2 className="panel-heading" id="wallet-title">
+          Your wallet
+        </h2>
+        <p className="banner banner-error" role="alert">
           No Freighter extension detected. TideSplit needs it to hold your keys
           and sign settlements.{" "}
           <a href="https://www.freighter.app/" target="_blank" rel="noreferrer noopener">
             Install Freighter
           </a>{" "}
-          and reload this page.
+          — if you just enabled it, press Check again.
         </p>
+        <button type="button" className="btn-outline-ts" onClick={onRecheck}>
+          Check again
+        </button>
       </section>
     );
   }
@@ -53,9 +80,14 @@ export function WalletPanel({ session, connecting, onConnect, onDisconnect, onRe
             {ERROR_COPY[session.lastError] ?? "Connecting did not complete. Please try again."}
           </p>
         )}
-        <button type="button" className="btn-primary-ts" onClick={onConnect} disabled={connecting}>
-          {connecting ? "Connecting…" : "Connect Freighter"}
-        </button>
+        <div className="btn-row">
+          <button type="button" className="btn-primary-ts" onClick={onConnect} disabled={connecting}>
+            {connecting ? "Connecting…" : "Connect Freighter"}
+          </button>
+          <button type="button" className="btn-outline-ts" onClick={onRecheck}>
+            Check again
+          </button>
+        </div>
       </section>
     );
   }
@@ -97,7 +129,13 @@ export function WalletPanel({ session, connecting, onConnect, onDisconnect, onRe
         </div>
         <div>
           <dt>Network</dt>
-          <dd>{session.onTestnet === null ? "Detecting…" : session.onTestnet ? "Testnet" : "Wrong network"}</dd>
+          <dd>
+            {session.onTestnet === null
+              ? "Detecting…"
+              : session.onTestnet
+                ? "Testnet"
+                : "Wrong network"}
+          </dd>
         </div>
       </dl>
 

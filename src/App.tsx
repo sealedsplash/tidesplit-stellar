@@ -9,7 +9,8 @@ import { RecentSplitsCard } from "./components/RecentSplitsCard";
 import { WaveDivider } from "./components/WaveDivider";
 
 export default function App() {
-  const { session, connect, disconnect, recheckNetwork } = useWalletSession();
+  const { session, connect, disconnect, recheckNetwork, recheckWallet } =
+    useWalletSession();
   const settlement = useSettlement();
   const recentSplits = useRecentSplits();
   const [connecting, setConnecting] = useState(false);
@@ -55,7 +56,13 @@ export default function App() {
           connecting={connecting}
           onConnect={() => void handleConnect()}
           onDisconnect={disconnect}
-          onRecheck={() => void recheckNetwork()}
+          onRecheck={() => {
+            if (session.phase === "connected") {
+              void recheckNetwork();
+            } else {
+              recheckWallet();
+            }
+          }}
         />
 
         <SplitPanel

@@ -137,6 +137,12 @@ a:focus-visible {
   border: 1px solid #ecd9b0;
 }
 
+.banner-info {
+  background: #e8f1fc;
+  color: #1d5fa8;
+  border: 1px solid #c4dbf5;
+}
+
 .banner-error {
   background: #fdecea;
   color: var(--ts-error);
