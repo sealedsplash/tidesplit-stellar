@@ -1,16 +1,19 @@
 /**
- * Accessibility polish for the TideSplit page:
- * a skip link, an explicit page landmark, and reduced-motion support.
+ * Accessibility helper: honors the user's prefers-reduced-motion setting.
+ * The initial value is read lazily so no setState fires inside an effect.
  */
 import { useEffect, useState } from "react";
 
-/** Honors the user's prefers-reduced-motion setting for transitions. */
+function readPreference(): boolean {
+  if (typeof window === "undefined" || !window.matchMedia) return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function useReducedMotion(): boolean {
-  const [reduced, setReduced] = useState(false);
+  const [reduced, setReduced] = useState(readPreference);
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(query.matches);
     const listener = (event: MediaQueryListEvent) => setReduced(event.matches);
     query.addEventListener("change", listener);
     return () => query.removeEventListener("change", listener);
