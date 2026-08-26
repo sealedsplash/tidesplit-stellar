@@ -35,6 +35,10 @@ export default function App() {
 
   return (
     <div className="page">
+      <a className="skip-link" href="#main">
+        Skip to main content
+      </a>
+
       <header className="masthead">
         <h1 className="wordmark">TideSplit</h1>
         <p className="slogan">

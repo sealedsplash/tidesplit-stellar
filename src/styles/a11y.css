@@ -1,0 +1,23 @@
+/* TideSplit accessibility helpers. */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 8px;
+  background: var(--ts-navy);
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: var(--ts-radius-pill);
+  z-index: 100;
+}
+
+.skip-link:focus {
+  left: 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
