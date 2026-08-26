@@ -1,0 +1,54 @@
+/*
+ * TideSplit design system.
+ * Warm off-white canvas, deep navy text, cobalt/teal gradients,
+ * organic wave dividers, rounded editorial typography.
+ */
+:root {
+  --ts-canvas: #faf7f2;
+  --ts-card: #ffffff;
+  --ts-navy: #14243d;
+  --ts-navy-soft: #3d5271;
+  --ts-cobalt: #2547c9;
+  --ts-teal: #0e9594;
+  --ts-sand: #f0e9dd;
+  --ts-border: #e3dccf;
+  --ts-error: #c0392b;
+  --ts-success: #1a7a4a;
+  --ts-pending: #b07a1e;
+  --ts-font-display: "Georgia", "Iowan Old Style", serif;
+  --ts-font-body: "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --ts-radius: 18px;
+  --ts-radius-pill: 999px;
+  --ts-shadow: 0 10px 30px rgba(20, 36, 61, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--ts-canvas);
+  color: var(--ts-navy);
+  font-family: var(--ts-font-body);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--ts-font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}

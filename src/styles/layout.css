@@ -1,0 +1,51 @@
+/* TideSplit layout and editorial component styles. */
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+.masthead {
+  margin-bottom: 8px;
+}
+
+.wordmark {
+  font-size: 2.3rem;
+  background: linear-gradient(100deg, var(--ts-cobalt), var(--ts-teal));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.slogan {
+  color: var(--ts-navy-soft);
+  font-size: 1.02rem;
+  margin: 6px 0 0;
+}
+
+.wave-divider {
+  display: block;
+  width: 100%;
+  height: 22px;
+  margin: 18px 0 26px;
+}
+
+.panel {
+  background: var(--ts-card);
+  border: 1px solid var(--ts-border);
+  border-radius: var(--ts-radius);
+  box-shadow: var(--ts-shadow);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.panel-heading {
+  font-size: 1.25rem;
+  margin-bottom: 18px;
+}
+
+.stack > * + * {
+  margin-top: 16px;
+}
