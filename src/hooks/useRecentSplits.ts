@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 export interface RecentSplit {
   id: string;
@@ -40,11 +40,9 @@ function load(): RecentSplit[] {
  * Nothing leaves the browser; clearing site data clears the list.
  */
 export function useRecentSplits() {
-  const [recent, setRecent] = useState<RecentSplit[]>([]);
-
-  useEffect(() => {
-    setRecent(load());
-  }, []);
+  // Lazy initializer reads storage synchronously during first render,
+  // avoiding a setState-in-effect cascade.
+  const [recent, setRecent] = useState<RecentSplit[]>(load);
 
   const record = useCallback((entry: Omit<RecentSplit, "id" | "recordedAt">) => {
     const next: RecentSplit[] = [
