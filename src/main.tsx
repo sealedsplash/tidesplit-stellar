@@ -4,6 +4,7 @@ import App from "./App";
 import "./styles/theme.css";
 import "./styles/layout.css";
 import "./styles/controls.css";
+import "./styles/recent.css";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {

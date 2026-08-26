@@ -5,7 +5,7 @@ import { validateSplitForm, type FormIssues } from "../split/validation";
 interface Props {
   balanceXlm: string | null;
   locked: boolean;
-  onSettle: (recipient: string, shareXlm: string) => void;
+  onSettle: (recipient: string, shareXlm: string, totalXlm: string, participants: number) => void;
 }
 
 /**
@@ -33,7 +33,12 @@ export function SplitPanel({ balanceXlm, locked, onSettle }: Props) {
     event.preventDefault();
     setSubmittedOnce(true);
     if (!canSubmit || !split) return;
-    onSettle(recipient.trim(), split.shareXlm);
+    onSettle(
+      recipient.trim(),
+      split.shareXlm,
+      total.trim(),
+      Number.parseInt(people, 10),
+    );
   }
 
   return (
