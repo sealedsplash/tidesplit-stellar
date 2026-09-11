@@ -2,6 +2,9 @@ name: Deploy TideSplit contract to Testnet
 
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "deploy-testnet-*"
 
 permissions:
   contents: write
