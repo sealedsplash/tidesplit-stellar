@@ -10,7 +10,7 @@ precisely what gets submitted.
 
 ## Live App
 
-[Launch TideSplit](https://tidesplit.netlify.app/)
+[Launch TideSplit on GitHub Pages](https://sealedsplash.github.io/tidesplit-stellar/)
 
 ## Features
 
