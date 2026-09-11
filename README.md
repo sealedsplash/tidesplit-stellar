@@ -144,3 +144,12 @@ signed envelopes are submitted to Horizon.
 ## License
 
 MIT
+
+## Verified Testnet deployment
+
+<!-- deployment:start -->
+- Contract ID: `CBOLGJBIWE4NUTIGJ57DCZOCCWSZ6JLXS2MV6SSYXDHGMKZEUNZSUMZN`
+- Contract explorer: https://stellar.expert/explorer/testnet/contract/CBOLGJBIWE4NUTIGJ57DCZOCCWSZ6JLXS2MV6SSYXDHGMKZEUNZSUMZN
+- Verified write transaction: `e1f942145846a230155a903bbdcd5581a9a2df775c34dd9305c5734aa9c7893a`
+- Transaction explorer: https://stellar.expert/explorer/testnet/tx/e1f942145846a230155a903bbdcd5581a9a2df775c34dd9305c5734aa9c7893a
+<!-- deployment:end -->
