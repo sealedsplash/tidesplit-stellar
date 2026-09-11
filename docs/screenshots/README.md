@@ -1,7 +1,11 @@
 # Submission Screenshots
 
-1. `01-tidesplit-home.png` — Freighter connection request on Testnet
-2. `02-wallet-connected.png` — Connected wallet and XLM balance
-3. `03-transaction-pending.png` — Calculated share awaiting Freighter signature
-4. `04-transaction-success.png` — Successful settlement with transaction hash
-5. `05-stellar-expert-confirmation.png` — Successful Testnet transaction on Stellar Expert
+The `yellow belt/` directory contains the current TideSplit submission set:
+
+1. `01-tidesplit-home.png` — competition landing page
+2. `02. multi wallet.png` — StellarWalletsKit wallet choices
+3. `03-wallet-connected.png` — connected Testnet wallet and workspace
+4. `04-transaction-success.png` — successful contract write and hash
+5. `05-stellar-expert-confirmation.png` — transaction proof on Stellar Expert
+
+The `white belt/` directory preserves the earlier submission screenshots.

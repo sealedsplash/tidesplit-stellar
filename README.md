@@ -106,25 +106,25 @@ signed envelopes are submitted to Horizon.
 
 ## Screenshots
 
-### Freighter connection request
+### Competition landing page
 
-![Freighter connection request on Stellar Testnet](docs/screenshots/01-tidesplit-home.png)
+![TideSplit competition landing page](docs/screenshots/yellow%20belt/01-tidesplit-home.png)
 
-### Connected wallet and XLM balance
+### StellarWalletsKit multi-wallet selection
 
-![Connected Freighter wallet with Testnet XLM balance](docs/screenshots/02-wallet-connected.png)
+![Freighter, Albedo, xBull, Rabet and LOBSTR wallet options](docs/screenshots/yellow%20belt/02.%20multi%20wallet.png)
 
-### Calculated share awaiting signature
+### Connected wallet and settlement workspace
 
-![Calculated TideSplit share awaiting confirmation in Freighter](docs/screenshots/03-transaction-pending.png)
+![Connected Testnet wallet in the TideSplit workspace](docs/screenshots/yellow%20belt/03-wallet-connected.png)
 
-### Successful Testnet settlement
+### Successful contract transaction
 
-![Successful TideSplit settlement with transaction hash](docs/screenshots/04-transaction-success.png)
+![Successful TideSplit contract transaction with transaction hash](docs/screenshots/yellow%20belt/04-transaction-success.png)
 
 ### Stellar Expert confirmation
 
-![Successful settlement verified on Stellar Expert Testnet](docs/screenshots/05-stellar-expert-confirmation.png)
+![Successful contract transaction verified on Stellar Expert Testnet](docs/screenshots/yellow%20belt/05-stellar-expert-confirmation.png)
 
 ## Verified Example Transaction
 
