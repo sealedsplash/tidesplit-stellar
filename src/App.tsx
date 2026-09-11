@@ -87,7 +87,7 @@ export default function App() {
       <a className="skip-link" href="#workspace">Skip to workspace</a>
       <div className="orb orb-a" aria-hidden="true" /><div className="orb orb-b" aria-hidden="true" />
       <header className="topbar">
-        <a className="brand" href="#top" aria-label="TideSplit home"><span className="brand-drop">T</span><span>TIDESPLIT</span></a>
+        <a className="brand" href="#top" aria-label="TideSplit home"><span className="brand-drop">T</span><span>TideSplit</span></a>
         <span className="network-pill"><i aria-hidden="true" /> STELLAR TESTNET</span>
         {wallet.address ? <button type="button" className="wallet-chip" onClick={() => void wallet.disconnect()} aria-label={`Disconnect wallet ${compact(wallet.address)}`}><span>{compact(wallet.address)}</span><b>{balance === null ? "Syncing…" : `${balance} XLM`}</b></button> : <a className="ghost-link" href="#wallets">Connect wallet</a>}
       </header>
@@ -117,7 +117,7 @@ export default function App() {
 
         <section className="activity" aria-labelledby="activity-title"><div className="activity-head"><div><p className="eyebrow">03 — FOLLOW THE RIPPLES</p><h2 id="activity-title">Live contract activity</h2></div><span className={eventsOnline ? "live" : "offline"} role="status"><i aria-hidden="true"/>{eventsOnline ? "POLLING LIVE" : "RPC RETRYING"}</span></div><div className="event-list">{events.length ? events.map((event) => <a key={event.id} href={event.txHash ? `https://stellar.expert/explorer/testnet/tx/${event.txHash}` : "#workspace"}><span className="event-icon" aria-hidden="true">≈</span><b>{event.kind === "paid" ? "Share recorded" : "New pool created"}</b><small>Ledger {event.ledger}</small><em>{event.at ? new Date(event.at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}) : "live"}</em></a>) : <div className="activity-empty"><span aria-hidden="true">≈</span><p>The surface is calm.<br/>New contract events will appear here automatically.</p></div>}</div></section>
       </main>
-      <footer><div className="brand"><span className="brand-drop">T</span><span>TIDESPLIT</span></div><p>Built for Stellar Yellow Belt · Testnet only</p><a href={DEFAULT_CONTRACT_ID ? `https://stellar.expert/explorer/testnet/contract/${DEFAULT_CONTRACT_ID}` : "https://stellar.expert/explorer/testnet"} target="_blank" rel="noreferrer">View on Stellar Expert ↗</a></footer>
+      <footer><div className="brand"><span className="brand-drop">T</span><span>TideSplit</span></div><p>Built for Stellar Yellow Belt · Testnet only</p><a href={DEFAULT_CONTRACT_ID ? `https://stellar.expert/explorer/testnet/contract/${DEFAULT_CONTRACT_ID}` : "https://stellar.expert/explorer/testnet"} target="_blank" rel="noreferrer">View on Stellar Expert ↗</a></footer>
     </div>
   );
 }
