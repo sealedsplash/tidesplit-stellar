@@ -22,6 +22,14 @@ precisely what gets submitted.
 - Settlement through a signed XLM payment with signing → submitting →
   confirmed/failed receipt states
 - Transaction hash plus Stellar Expert explorer link on success
+- **Yellow Belt: Multi-wallet detection** — TideSplit probes for installed
+  Stellar wallet extensions and routes signing through any detected wallet
+  via `@stellar/wallet-sdk`
+- **Yellow Belt: Soroban contract** — expense pools are stored on-chain via
+  a Soroban contract; pool creation, share computation, and settlement
+  recording all happen on-chain through direct RPC calls
+- **Yellow Belt: Contract UI** — `ContractForm` creates on-chain pools;
+  `ContractTable` loads and displays pool metadata plus settlement history
 - Distinct messages for: missing wallet, declined access, declined signing,
   wrong network, invalid recipient, insufficient balance, malformed
   transaction, and Horizon outages
@@ -63,18 +71,35 @@ Mainnet by misconfiguration.
 
 ```
 src/
-├── components/            # WalletPanel, SplitPanel, SettlementReceipt, WaveDivider
+├── components/            # WalletPanel, SplitPanel, SettlementReceipt, WaveDivider, ContractForm, ContractTable
 ├── hooks/
 │   ├── useWalletSession.ts   # Connection phase machine + balance states
-│   └── useSettlement.ts      # Build/sign/submit lifecycle + receipt record
-├── split/
+│   ├── useSettlement.ts      # Build/sign/submit lifecycle + receipt record
+│   └── useRecentSplits.ts    # Local-only recent calculations history
+├── contract/                # Yellow Belt: contract RPC service + Soroban wiring
+│   └── contractService.ts    # useContract hook, PoolRecord, SettlementRecord
+├── wallet/                  # Yellow Belt: multi-wallet adapter + Freighter
+│   ├── freighterAdapter.ts   # Typed Freighter result wrapper
+│   ├── freighterApi.type.ts  # Typed Freighter API surface
+│   ├── horizonClient.ts      # Balance reads + settlement submission
+│   └── multiWallet.ts        # Multi-wallet state machine via @stellar/wallet-sdk
+├── split/                   # Yellow Belt: contract source
 │   ├── calculator.ts         # Integer stroop arithmetic for even division
 │   └── validation.ts         # Inline form rules with explanatory messages
-├── wallet/
-│   ├── freighterAdapter.ts   # Typed Freighter result wrapper
-│   └── horizonClient.ts      # Balance reads + settlement submission
-└── styles/                # Theme tokens, layout, controls
+└── styles/                  # Theme tokens, layout, controls
 ```
+
+### Yellow Belt additions
+
+- `contracts/tidesplit/` — Soroban contract (Cargo.toml, src/lib.rs) with
+  pool creation, share computation, settlement recording, and 10 unit tests
+- `src/contract/contractService.ts` — React hook + RPC bridge to the
+  on-chain contract
+- `src/wallet/multiWallet.ts` — wallet detection + connection state via
+  `@stellar/wallet-sdk`
+- `src/components/ContractForm.tsx` — create on-chain pools
+- `src/components/ContractTable.tsx` — load and display pool + settlement data
+- `tests/contract.service.test.ts` — contract service unit tests
 
 Secret keys never touch the app: unsigned envelopes go to Freighter, and only
 signed envelopes are submitted to Horizon.

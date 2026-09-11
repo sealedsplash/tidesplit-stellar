@@ -1,0 +1,111 @@
+name: Deploy TideSplit contract to Testnet
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tidesplit-testnet-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build, deploy, and verify real write
+    runs-on: ubuntu-latest
+    environment: testnet
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
+      - uses: stellar/stellar-cli@v27.0.0
+
+      - name: Test and build contract
+        working-directory: contracts/tidesplit
+        run: |
+          cargo test --locked
+          stellar contract build
+
+      - name: Create and fund ephemeral Testnet identity
+        run: |
+          stellar keys generate splash-ci --network testnet --fund
+          echo "DEPLOYER_ADDRESS=$(stellar keys address splash-ci)" >> "$GITHUB_ENV"
+
+      - name: Deploy contract
+        id: deploy
+        shell: bash
+        run: |
+          output="$(stellar contract deploy \
+            --wasm contracts/tidesplit/target/wasm32v1-none/release/tidesplit_contract.wasm \
+            --source-account splash-ci \
+            --network testnet)"
+          contract_id="$(printf '%s' "$output" | grep -Eo 'C[A-Z2-7]{55}' | tail -n 1)"
+          test -n "$contract_id" || { echo "Contract ID missing from deploy output" >&2; exit 1; }
+          echo "contract_id=$contract_id" >> "$GITHUB_OUTPUT"
+          echo "Contract deployed: $contract_id"
+
+      - name: Execute and verify a real contract write
+        id: verify
+        shell: bash
+        env:
+          CONTRACT_ID: ${{ steps.deploy.outputs.contract_id }}
+        run: |
+          start_ledger="$(stellar ledger latest --network testnet --output json | jq -r '.sequence // .sequenceNumber // .id')"
+          stellar contract invoke \
+            --id "$CONTRACT_ID" \
+            --source-account splash-ci \
+            --network testnet \
+            -- create_pool \
+            --creator "$DEPLOYER_ADDRESS" \
+            --title "Yellow Belt launch" \
+            --total_stroops 420000000 \
+            --participants 4
+          stellar events --id "$CONTRACT_ID" --start-ledger "$start_ledger" --count 10 --output json --network testnet > contract-call-events.json
+          tx_hash="$(jq -r '[.. | objects | .txHash? // .tx_hash? // empty][0] // empty' contract-call-events.json)"
+          if [[ ! "$tx_hash" =~ ^[0-9a-fA-F]{64}$ ]]; then
+            tx_hash="$(grep -Eo '[0-9a-fA-F]{64}' contract-call-events.json | head -n 1)"
+          fi
+          [[ "$tx_hash" =~ ^[0-9a-fA-F]{64}$ ]] || { echo "Verified write hash not found in contract events" >&2; exit 1; }
+          echo "tx_hash=$tx_hash" >> "$GITHUB_OUTPUT"
+          echo "Verified contract write: $tx_hash"
+
+      - name: Record public deployment metadata
+        env:
+          CONTRACT_ID: ${{ steps.deploy.outputs.contract_id }}
+          TX_HASH: ${{ steps.verify.outputs.tx_hash }}
+        run: node scripts/update-deployment.mjs "$CONTRACT_ID" "$TX_HASH"
+
+      - name: Commit public IDs without credentials
+        env:
+          CONTRACT_ID: ${{ steps.deploy.outputs.contract_id }}
+          TX_HASH: ${{ steps.verify.outputs.tx_hash }}
+        run: |
+          git config user.name "splash-deploy-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/config/deployment.json README.md
+          git commit -m "chore: record verified Testnet deployment $CONTRACT_ID"
+          git push origin HEAD:main
+
+      - name: Publish verification summary
+        env:
+          CONTRACT_ID: ${{ steps.deploy.outputs.contract_id }}
+          TX_HASH: ${{ steps.verify.outputs.tx_hash }}
+        run: |
+          {
+            echo "## Splash Testnet deployment"
+            echo "- Contract: https://stellar.expert/explorer/testnet/contract/$CONTRACT_ID"
+            echo "- Verified write: https://stellar.expert/explorer/testnet/tx/$TX_HASH"
+            echo "- Deployer was ephemeral and its secret was never committed."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tidesplit-testnet-deployment
+          path: |
+            contract-call-events.json
+            contracts/tidesplit/target/wasm32v1-none/release/tidesplit_contract.wasm
+          if-no-files-found: error

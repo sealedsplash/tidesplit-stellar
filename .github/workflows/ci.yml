@@ -1,0 +1,46 @@
+name: Quality gates
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    name: Frontend tests, lint, and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+
+  contract:
+    name: Soroban tests and WASM build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: contracts/tidesplit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32v1-none
+      - uses: stellar/stellar-cli@v27.0.0
+      - run: cargo fmt --all -- --check
+      - run: cargo test --locked
+      - run: stellar contract build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tidesplit-contract-wasm
+          path: contracts/tidesplit/target/wasm32v1-none/release/tidesplit_contract.wasm
+          if-no-files-found: error
