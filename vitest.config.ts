@@ -9,5 +9,10 @@ export default defineConfig({
     setupFiles: ["./tests/setup.ts"],
     include: ["tests/**/*.test.{ts,tsx}"],
     testTimeout: 20000,
+    server: {
+      deps: {
+        inline: ["@creit.tech/stellar-wallets-kit", "@stellar/freighter-api"],
+      },
+    },
   },
 });
