@@ -4,3 +4,6 @@ coverage
 *.local
 .env
 .DS_Store
+contracts/tidesplit/target
+contracts/tidesplit/target-gnu
+contracts/tidesplit/.cargo/config.toml
