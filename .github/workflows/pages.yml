@@ -1,8 +1,6 @@
-name: Publish Splash to GitHub Pages
+name: Publish TideSplit to GitHub Pages
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
