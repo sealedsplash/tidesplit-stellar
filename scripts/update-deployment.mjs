@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import process from "node:process";
 
 const [contractId, writeTxHash] = process.argv.slice(2);
 if (!/^C[A-Z2-7]{55}$/.test(contractId ?? "")) throw new Error("Invalid Stellar contract ID");
