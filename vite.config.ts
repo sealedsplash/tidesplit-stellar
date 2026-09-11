@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  base: "./",
   server: { port: 5174, open: false },
-  build: { outDir: "dist", sourcemap: true },
+  build: { outDir: "dist", sourcemap: true, chunkSizeWarningLimit: 800 },
 });

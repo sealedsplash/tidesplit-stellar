@@ -19,6 +19,7 @@ interface Props {
   onConnect: () => void;
   onDisconnect: () => void;
   onRecheck: () => void;
+  walletLabel?: string;
 }
 
 /** Connection card: connect/disconnect controls, guard notice, balance. */
